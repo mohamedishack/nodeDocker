@@ -17,9 +17,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./path/to/Dockerfile
+          file: ./Dockerfile
           push: true
-          tags: your-docker-image-tag
+          tags: 1.0
 
   deploy:
     needs: build
