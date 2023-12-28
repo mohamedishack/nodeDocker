@@ -1,41 +1,38 @@
-name: CI/CD Pipeline
+name: Node.js Docker Build and Deploy
 
 on:
   push:
     branches:
-      - master
+      - master # Change this to your default branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Login to Docker Registry
-        run: echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin ghcr.io
+    - name: Set up Docker
+      uses: docker/setup-docker@v2
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: 1.0
+    - name: Build Docker image
+      run: docker build -t your-docker-image-name:latest .
+      working-directory: ${{ github.workspace }}
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
+    - name: Log in to Docker Hub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-    steps:
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Push Docker image to Docker Hub
+      run: docker push your-docker-image-name:latest
 
-      - name: Deploy to Server
-        run: |
-          ssh vboxuser@192.168.29.104 "cd /home/vboxuser && docker-compose up -d"
+    - name: Deploy to Virtual Machine
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          docker pull your-docker-image-name:latest
+          docker run -d --name your-container-name -p 8080:80 your-docker-image-name:latest
