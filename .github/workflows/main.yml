@@ -1,26 +1,36 @@
-name: CI/CD with Docker
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v1
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./path/to/Dockerfile
+          push: true
+          tags: your-docker-image-tag
 
-      - name: Build Docker image
-        run: docker build -t your-image-name .
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
-      - name: Push Docker image to Docker Hub
+    steps:
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Server
         run: |
-          echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker tag your-image-name ${{ secrets.DOCKERHUB_USERNAME }}/ishackdeen/node_task:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ishackdeen/node_task:latest
+          ssh vboxuser@192.168.29.104 "cd /home/vboxuser && docker-compose up -d"
