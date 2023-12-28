@@ -2,8 +2,9 @@ var express = require('express');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
-var port = 3001;
+var port = 9000;
 app.get('/', (req, res) => {
+    console('api hit')
     res.send("backend API Running...");
 })
 const path = require("path");
@@ -13,5 +14,5 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.listen(port, () => {
-    console.log("server connected..")
+    console.log("server connected..",port)
 });
