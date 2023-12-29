@@ -26,6 +26,8 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+      env:
+    DEBUG: 'true'
 
     - name: Push Docker image to Docker Hub
       run: docker push your-docker-image-name:latest
