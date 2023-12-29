@@ -35,5 +35,5 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          docker pull your-docker-image-name:latest
-          docker run -d --name your-container-name -p 8080:80 your-docker-image-name:latest
+          docker pull node_task:latest
+          docker run -d --name your-container-name -p 8080:80 node_task:latest
