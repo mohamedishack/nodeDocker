@@ -25,6 +25,7 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: docker push ishackdeen/node_task:1.0
+
     - name: Deploy to Virtual Machine
       uses: appleboy/ssh-action@master
       with:
@@ -33,5 +34,5 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          docker pull node_task:latest
-          docker run -d --name your-container-name -p 8080:80 node_task:latest
+          docker pull ishackdeen/pull node_task:1.0
+          docker run -d --name test -p 8080:80 ishackdeen/node_task:1.0
