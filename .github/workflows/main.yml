@@ -25,18 +25,15 @@ jobs:
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Build Docker image
-      run: docker build -t ishackdeen/node_task:latest .
+      run: docker build -t node_task:1.0 .
       working-directory: ${{ github.workspace }}
 
 
     - name: Login to Docker Hub (again)
       run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Tag Docker image
-      run: docker tag ishackdeen/node_task:1.0 ishackdeen/node_task:latest
-
     - name: Push Docker image to Docker Hub
-      run: docker push ishackdeen/node_task:latest
+      run: docker push ishackdeen/node_task:1.0
 
     - name: Deploy to Virtual Machine
       uses: appleboy/ssh-action@master
