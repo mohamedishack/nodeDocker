@@ -36,13 +36,13 @@ jobs:
           script: |
             echo "SSH Connection Successful"
 
-    - name: Deploy to Virtual Machine
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          docker pull ishackdeen/node_task:1.0
-          docker run -d --name test -p 8080:80 ishackdeen/node_task:1.0
+    # - name: Deploy to Virtual Machine
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.SSH_HOST }}
+    #     username: ${{ secrets.SSH_USERNAME }}
+    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     port: ${{ secrets.SSH_PORT }}
+    #     script: |
+    #       docker pull ishackdeen/node_task:1.0
+    #       docker run -d --name test -p 8080:80 ishackdeen/node_task:1.0
