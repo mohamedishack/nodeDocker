@@ -1,40 +1,32 @@
 name: Node.js Docker Build and Deploy
-
 on:
   push:
     branches:
       - master
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-
     - name: Build Docker image
       run: docker build -t ishackdeen/node_task:1.0 .
       working-directory: ${{ github.workspace }}
-
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-
     - name: Push Docker image to Docker Hub
       run: docker push ishackdeen/node_task:1.0
-
-      - name: Debug SSH Connection
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            echo "SSH Connection Successful"
+    - name: Debug SSH Connection
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          echo "SSH Connection Successful"
 
     # - name: Deploy to Virtual Machine
     #   uses: appleboy/ssh-action@master
