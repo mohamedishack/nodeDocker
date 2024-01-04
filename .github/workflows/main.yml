@@ -26,6 +26,16 @@ jobs:
     - name: Push Docker image to Docker Hub
       run: docker push ishackdeen/node_task:1.0
 
+      - name: Debug SSH Connection
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            echo "SSH Connection Successful"
+
     - name: Deploy to Virtual Machine
       uses: appleboy/ssh-action@master
       with:
