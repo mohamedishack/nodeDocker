@@ -28,7 +28,6 @@ jobs:
         script: |
           echo "SSH Connection Successful"
           ssh -v -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}
-
     # - name: Deploy to Virtual Machine
     #   uses: appleboy/ssh-action@master
     #   with:
