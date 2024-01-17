@@ -25,6 +25,8 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
+        timeout: 120s  # Adjust the overall timeout duration (default is 30s)
+        command_timeout: 5m   
         script: |
           echo "SSH Connection Successful"
           ssh -v -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}
